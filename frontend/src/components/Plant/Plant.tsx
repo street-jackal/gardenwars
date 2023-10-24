@@ -28,10 +28,12 @@ const Plant = ({
   height,
   characteristics,
   zones,
+  favorited = false,
 }: IPlant): JSX.Element => {
   const classes = plantStyles();
 
   const [expanded, setExpanded] = useState(false);
+  const [favorite, setFavorite] = useState(favorited);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -86,8 +88,8 @@ const Plant = ({
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton>
-          <FavoriteIcon />
+        <IconButton onClick={() => setFavorite(!favorite)}>
+          <FavoriteIcon color={favorite ? "primary" : "disabled"} />
         </IconButton>
         <IconButton>
           <ShareIcon />

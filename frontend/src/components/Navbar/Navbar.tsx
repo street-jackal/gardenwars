@@ -1,16 +1,6 @@
 import { MouseEvent, useState } from "react";
 
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  InputBase,
-  Badge,
-  MenuItem,
-  Menu,
-} from "@material-ui/core/";
-import MenuIcon from "@material-ui/icons/Menu";
+import { AppBar, Toolbar, IconButton, Typography, InputBase, Badge, MenuItem, Menu } from "@material-ui/core/";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
@@ -18,12 +8,12 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import navbarStyles from "./navbarStyles";
 import CardContainer from "../CardContainer/CardContainer";
+import SwipeableTemporaryDrawer from "../Drawer/Drawer";
 
 const Navbar = () => {
   const classes = navbarStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState("");
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -43,6 +33,16 @@ const Navbar = () => {
 
   const handleMobileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
   };
 
   const menuId = "primary-search-account-menu";
@@ -115,14 +115,7 @@ const Navbar = () => {
       <div className={classes.grow}>
         <AppBar position="sticky">
           <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="open drawer"
-            >
-              <MenuIcon />
-            </IconButton>
+            <SwipeableTemporaryDrawer aria-label="open drawer" />
             <Typography className={classes.title} variant="h6" noWrap>
               Garden Wars
             </Typography>
@@ -147,10 +140,7 @@ const Navbar = () => {
                   <MailIcon />
                 </Badge>
               </IconButton>
-              <IconButton
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
+              <IconButton aria-label="show 17 new notifications" color="inherit">
                 <Badge badgeContent={17} color="secondary">
                   <NotificationsIcon />
                 </Badge>

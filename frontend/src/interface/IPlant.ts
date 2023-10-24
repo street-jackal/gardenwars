@@ -4,5 +4,5 @@ export interface IPlant {
   height?: (string | null)[];
   characteristics?: string;
   zones?: (string | null)[];
-  benefits?: string;
+  favorited?: boolean;
 }
