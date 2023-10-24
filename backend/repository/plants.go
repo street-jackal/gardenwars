@@ -20,6 +20,7 @@ type PlantsRepo interface {
 	InsertMany(ctx context.Context, ps []*models.Plant) error
 
 	Get(ctx context.Context, id string) (*models.Plant, error)
+	GetAll(ctx context.Context) ([]*models.Plant, error)
 	GetByCommon(ctx context.Context, common string) ([]*models.Plant, error)
 	GetByBotanical(ctx context.Context, botanical string) ([]*models.Plant, error)
 
@@ -117,6 +118,21 @@ func (r *plantsRepo) Get(ctx context.Context, id string) (*models.Plant, error) 
 	}
 
 	return plant, nil
+}
+
+func (r *plantsRepo) GetAll(ctx context.Context) ([]*models.Plant, error) {
+	cursor, err := r.col.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var plants []*models.Plant
+	if err := cursor.All(ctx, &plants); err != nil {
+		return nil, err
+	}
+
+	return plants, nil
 }
 
 func (r *plantsRepo) GetByCommon(ctx context.Context, common string) ([]*models.Plant, error) {

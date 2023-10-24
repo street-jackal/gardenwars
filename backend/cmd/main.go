@@ -9,6 +9,7 @@ import (
 
 	"github.com/street-jackal/gardenwars/env"
 	"github.com/street-jackal/gardenwars/handlers"
+	"github.com/street-jackal/gardenwars/middleware"
 	"github.com/street-jackal/gardenwars/repository"
 	gardenwars "github.com/street-jackal/gardenwars/service"
 )
@@ -24,7 +25,13 @@ func main() {
 	// init the service
 	svc := initService(ctx)
 
+	// use the default gin router
 	router := gin.Default()
+
+	// attach middlwares
+	router.Use(middleware.CorsMiddleware())
+
+	// register the routes
 	handlers.RegisterPublicRoutes(svc, router)
 
 	router.Run()
