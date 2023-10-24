@@ -7,10 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/street-jackal/gardenwars/cmd/gardenwars"
 	"github.com/street-jackal/gardenwars/env"
-	"github.com/street-jackal/gardenwars/internal/handlers"
+	"github.com/street-jackal/gardenwars/handlers"
 	"github.com/street-jackal/gardenwars/repository"
+	gardenwars "github.com/street-jackal/gardenwars/service"
 )
 
 func main() {

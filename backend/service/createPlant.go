@@ -16,10 +16,9 @@ func (svc *Service) CreatePlant(c *gin.Context) {
 		return
 	}
 
-	
 	if err := svc.PlantsRepo.Insert(c.Request.Context(), &plant); err != nil {
 		slog.Error("Failed to insert a Plant", err)
 	}
-	
+
 	c.JSONP(http.StatusOK, plant)
 }

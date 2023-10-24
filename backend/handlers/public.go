@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/street-jackal/gardenwars/cmd/gardenwars"
+	gardenwars "github.com/street-jackal/gardenwars/service"
 )
 
 func RegisterPublicRoutes(svc *gardenwars.Service, r *gin.Engine) {
