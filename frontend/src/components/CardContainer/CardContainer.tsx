@@ -1,6 +1,5 @@
 import { Grid } from "@material-ui/core";
 import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { IPlant } from "../../interface/IPlant";
 import { getAllPlants } from "../../api/plants";
 import Plant from "../Plant/Plant";
@@ -38,7 +37,7 @@ const CardContainer = ({ searchValue }: ContainerProps): JSX.Element => {
           .filter((plant) => plant && plant.common?.match(RegExp(searchValue, "i")))
           .map((props: IPlant | null) => (
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <Plant key={uuidv4()} {...props} />
+              <Plant key={props?.id} {...props} />
             </Grid>
           ))}
     </Grid>
