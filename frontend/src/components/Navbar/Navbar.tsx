@@ -9,7 +9,6 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import navbarStyles from "./navbarStyles";
 import CardContainer from "../CardContainer/CardContainer";
 import SwipeableTemporaryDrawer from "../Drawer/Drawer";
-import { getAllPlants } from "../../api/plants";
 
 const Navbar = () => {
   const classes = navbarStyles();
@@ -44,15 +43,6 @@ const Navbar = () => {
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
-  };
-
-  const handleGetPlants = async () => {
-    try {
-      const result = await getAllPlants();
-      console.log("result", result);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const menuId = "primary-search-account-menu";
@@ -150,7 +140,7 @@ const Navbar = () => {
                   <MailIcon />
                 </Badge>
               </IconButton>
-              <IconButton aria-label="show 17 new notifications" color="inherit" onClick={handleGetPlants}>
+              <IconButton aria-label="show 17 new notifications" color="inherit">
                 <Badge badgeContent={17} color="secondary">
                   <NotificationsIcon />
                 </Badge>
