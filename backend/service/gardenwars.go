@@ -7,6 +7,7 @@ import (
 
 type Service struct {
 	PlantsRepo repository.PlantsRepo
+	UsersRepo  repository.UsersRepo
 }
 
 type GardenWars interface {
@@ -15,4 +16,7 @@ type GardenWars interface {
 
 	GetByBotanical(c *gin.Context) error
 	GetByCommon(c *gin.Context) error
+
+	CreateUser(c *gin.Context) error
+	LoginUser(c *gin.Context) error
 }

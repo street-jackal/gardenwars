@@ -104,11 +104,6 @@ func (r *plantsRepo) InsertMany(ctx context.Context, ps []*models.Plant) error {
 }
 
 func (r *plantsRepo) Get(ctx context.Context, id string) (*models.Plant, error) {
-	// define how much time this call is allowed to take(from the full context time).
-	// this has to be less than the allowed time of the full context time.
-	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
-	defer cancel()
-
 	filter := bson.M{"ID": id}
 
 	plant := &models.Plant{}

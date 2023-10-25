@@ -5,6 +5,8 @@ import "os"
 var (
 	dbURL  string
 	dbName string
+
+	userJWTSecret string
 )
 
 func Init() {
@@ -16,6 +18,10 @@ func Init() {
 		dbName = "gardenwars"
 	}
 
+	if userJWTSecret = os.Getenv("USER_JWT_SECRET"); userJWTSecret == "" {
+		userJWTSecret = "secret"
+	}
+
 }
 
 func GetDbURL() string {
@@ -24,4 +30,8 @@ func GetDbURL() string {
 
 func GetDbName() string {
 	return dbName
+}
+
+func GetUserJWTSecret() string {
+	return userJWTSecret
 }
