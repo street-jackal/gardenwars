@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/street-jackal/gardenwars/service/types/responses"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,22 +18,35 @@ func (svc *Service) LoginUser(c *gin.Context) {
 	userLoginReq := &userLoginRequest{}
 
 	if err := c.ShouldBindJSON(userLoginReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, responses.BaseResponse{
+			Status:  http.StatusBadRequest,
+			Success: false,
+			Message: err.Error(),
+		})
+
 		return
 	}
 
 	// check that the user exists
 	user, err := svc.UsersRepo.GetByEmail(c.Request.Context(), userLoginReq.Email)
-	if err == nil {
-		if err != nil {
-			if err == mongo.ErrNoDocuments {
-				c.JSON(http.StatusBadRequest, gin.H{"error": "User does not exist"})
-				return
-			}
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			c.JSON(http.StatusBadRequest, responses.BaseResponse{
+				Status:  http.StatusBadRequest,
+				Success: false,
+				Message: "User does not exist",
+			})
 
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		c.JSON(http.StatusBadRequest, responses.BaseResponse{
+			Status:  http.StatusBadRequest,
+			Success: false,
+			Message: err.Error(),
+		})
+
+		return
 	}
 
 	// check that the password is correct
@@ -41,11 +55,21 @@ func (svc *Service) LoginUser(c *gin.Context) {
 		[]byte(userLoginReq.Password),
 	); err != nil {
 		if err == bcrypt.ErrMismatchedHashAndPassword {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect password"})
+			c.JSON(http.StatusBadRequest, responses.BaseResponse{
+				Status:  http.StatusBadRequest,
+				Message: "Incorrect password",
+				Success: false,
+			})
+
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, responses.BaseResponse{
+			Status:  http.StatusInternalServerError,
+			Message: err.Error(),
+			Success: false,
+		})
+
 		return
 	}
 

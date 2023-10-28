@@ -1,15 +1,17 @@
-import { AxiosResponse } from 'axios';
-import axiosInstance from './axiosInstance';
-import { IPlant } from '../interface/IPlant';
-import {BASE_URL} from '../url/urls';
+import axiosInstance from "./axiosInstance";
+import { IPlant } from "../interface/IPlant";
+import { BASE_URL } from "../url/urls";
 
 export const getAllPlants = async (): Promise<IPlant[]> => {
-    try {
-        const response: AxiosResponse = await axiosInstance.get(BASE_URL + '/plants/getAll');
-        return response.data as IPlant[];
-    } catch (error) {
-        console.error(error);
-    }
+  const { data } = await axiosInstance.get(`${BASE_URL}/plants/getAll`);
+  return data as IPlant[];
+};
 
-    return [];
+interface GetAllPlantsForUserPayload {
+  userID: string;
+}
+
+export const getAllPlantsForUser = async (body: GetAllPlantsForUserPayload): Promise<IPlant[]> => {
+  const { data } = await axiosInstance.post(`${BASE_URL}/plants/getAllForUser`, body);
+  return data as IPlant[];
 };

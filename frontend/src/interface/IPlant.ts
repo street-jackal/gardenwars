@@ -1,5 +1,5 @@
 export interface IPlant {
-  id?: string;
+  id: string;
   common?: string;
   botanical?: string;
   height?: (string | null)[];

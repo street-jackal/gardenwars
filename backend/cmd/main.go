@@ -43,8 +43,14 @@ func initService(ctx context.Context) *gardenwars.Service {
 		slog.Error("Failed to initialize the Plants repo", err)
 	}
 
+	usersRepo, err := repository.NewUsersRepo(ctx)
+	if err != nil {
+		slog.Error("Failed to initialize the Users repo", err)
+	}
+
 	// init the service and return it
 	return &gardenwars.Service{
 		PlantsRepo: plantsRepo,
+		UsersRepo:  usersRepo,
 	}
 }

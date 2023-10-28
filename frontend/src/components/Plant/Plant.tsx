@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-undef */
 import {
   Avatar,
   Card,
@@ -21,15 +20,11 @@ import clsx from "clsx";
 import fern from "../../images/fern.png";
 import plantStyles from "./plantStyles";
 import { IPlant } from "../../interface/IPlant";
+import { addUserFavorite, removeUserFavorite } from "../../api/users";
 
-const Plant = ({
-  common,
-  botanical,
-  height,
-  characteristics,
-  zones,
-  favorited = false,
-}: IPlant): JSX.Element => {
+type PlantProps = IPlant & {userID: string};
+
+const Plant = ({ id, common, botanical, height, characteristics, zones, favorited, userID }: PlantProps): JSX.Element => {
   const classes = plantStyles();
 
   const [expanded, setExpanded] = useState(false);
@@ -39,16 +34,33 @@ const Plant = ({
     setExpanded(!expanded);
   };
 
-  const formatRange = (
-    range: (string | null)[] | undefined,
-    isHeight: boolean
-  ): string | null => {
+  const handleAddFavorite = async () => {
+    try {
+      const response = await addUserFavorite({ userID: userID, plantID: id });
+      if (response.data.success) {
+        setFavorite(true);
+      }
+    } catch (response) {
+      console.log(response);
+    }
+  };
+
+  const handleRemoveFavorite = async () => {
+    try {
+      const response = await removeUserFavorite({ userID: userID, plantID: id });
+      if (response.data.success) {
+        setFavorite(false);
+      }
+    } catch (response) {
+      console.log(response);
+    }
+  };
+
+  const formatRange = (range: (string | null)[] | undefined, isHeight: boolean): string | null => {
     if (range) {
       return range[0]
         ? range[1]
-          ? (!isHeight ? "Zones: " : "") +
-            `${range[0]}-${range[1]}` +
-            (isHeight ? `"` : "")
+          ? (!isHeight ? "Zones: " : "") + `${range[0]}-${range[1]}` + (isHeight ? `"` : "")
           : `${range[0]}"`
         : "";
     }
@@ -88,7 +100,12 @@ const Plant = ({
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton onClick={() => setFavorite(!favorite)}>
+        <IconButton
+          onClick={() => {
+            setFavorite(!favorite);
+            favorite ? handleRemoveFavorite() : handleAddFavorite();
+          }}
+        >
           <FavoriteIcon color={favorite ? "primary" : "disabled"} />
         </IconButton>
         <IconButton>

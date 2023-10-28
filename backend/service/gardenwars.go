@@ -16,7 +16,12 @@ type GardenWars interface {
 
 	GetByBotanical(c *gin.Context) error
 	GetByCommon(c *gin.Context) error
+	GetAllPlants(c *gin.Context) error
+	GetAllPlantsForUser(c *gin.Context) error
 
 	CreateUser(c *gin.Context) error
 	LoginUser(c *gin.Context) error
+
+	AddUserFavorite(c *gin.Context) error
+	RemoveUserFavorite(c *gin.Context) error
 }

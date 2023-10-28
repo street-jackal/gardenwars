@@ -21,6 +21,9 @@ type UsersRepo interface {
 	GetByEmail(ctx context.Context, email string) (*models.User, error)
 	GetAll(ctx context.Context) ([]*models.User, error)
 
+	AddFavorite(ctx context.Context, userID, plantID string) error
+	RemoveFavorite(ctx context.Context, userID, plantID string) error
+
 	Delete(ctx context.Context, id string) error
 }
 
@@ -51,7 +54,7 @@ func NewUsersRepo(ctx context.Context) (UsersRepo, error) {
 			},
 			{
 				Keys: bson.D{
-					bson.E{Key: "Name", Value: 1},
+					bson.E{Key: "Email", Value: 1},
 				},
 				Options: options.Index().SetUnique(true),
 			},
@@ -117,6 +120,34 @@ func (r *usersRepo) GetAll(ctx context.Context) ([]*models.User, error) {
 	}
 
 	return users, nil
+}
+
+func (r *usersRepo) AddFavorite(ctx context.Context, userID, plantID string) error {
+	filter := bson.M{"ID": userID}
+	update := bson.M{
+		"$addToSet": bson.M{"Favorites": plantID},
+		"$set":      bson.M{"updatedAt": time.Now()},
+	}
+
+	if err := r.col.FindOneAndUpdate(ctx, filter, update).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *usersRepo) RemoveFavorite(ctx context.Context, userID, plantID string) error {
+	filter := bson.M{"ID": userID}
+	update := bson.M{
+		"$pull": bson.M{"Favorites": plantID},
+		"$set":  bson.M{"updatedAt": time.Now()},
+	}
+
+	if err := r.col.FindOneAndUpdate(ctx, filter, update).Err(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *usersRepo) Delete(ctx context.Context, id string) error {

@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import { IPlant } from "../../interface/IPlant";
-import { getAllPlants } from "../../api/plants";
+import { getAllPlantsForUser } from "../../api/plants";
 import Plant from "../Plant/Plant";
 import cardContainerStyles from "./cardContainerStyles";
 import { useQuery } from "react-query";
@@ -9,12 +9,12 @@ import { IUser } from "../../interface/IUser";
 
 type ContainerProps = {
   searchValue: string;
-  loggedInUser?: IUser | null;
+  loggedInUser: IUser;
 };
 
-const CardContainer = ({ searchValue, loggedInUser }: ContainerProps): JSX.Element => {
+const LoggedInUserPlants = ({ searchValue, loggedInUser }: ContainerProps): JSX.Element => {
   const classes = cardContainerStyles();
-  const plantsQuery = useQuery("plants", getAllPlants);
+  const plantsQuery = useQuery('userPlants', () => getAllPlantsForUser({userID: loggedInUser.id}));
   const [visiblePlants, setVisiblePlants] = useState(plantsQuery.data as IPlant[]);
 
   useEffect(() => {
@@ -37,14 +37,13 @@ const CardContainer = ({ searchValue, loggedInUser }: ContainerProps): JSX.Eleme
       {visiblePlants &&
         visiblePlants
           .filter((plant) => plant.common?.match(RegExp(searchValue, "i")))
-          //.filter((plant) => loggedInUser && loggedInUser.favorites && plant.id in loggedInUser.favorites)
           .map((props: IPlant) => (
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-              <Plant key={props.id} userID={loggedInUser? loggedInUser.id:""} {...props} />
+              <Plant key={props.id} userID={loggedInUser.id} favorited={true} {...props} />
             </Grid>
           ))}
     </Grid>
   );
 };
 
-export default CardContainer;
+export default LoggedInUserPlants;
