@@ -38,7 +38,7 @@ func Authenticate() gin.HandlerFunc {
 			return
 		}
 
-		// TODO: use fields from the Claims that we need (for expiration et)
+		// TODO: use fields from the Claims that we need (for expiration etc)
 		mapClaims := token.Claims.(jwt.MapClaims)
 		fmt.Printf("%+v\n", mapClaims)
 

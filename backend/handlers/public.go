@@ -14,6 +14,8 @@ func RegisterPublicRoutes(svc *gardenwars.Service, r *gin.Engine) {
 	r.POST("/plants/create", svc.CreatePlant)
 	r.POST("/plants/createMany", svc.CreatePlants)
 
+	r.POST("/plants/images/update", svc.SearchPlantsImages)
+
 	// users endpoints
 	r.POST("/users/signup", svc.CreateUser)
 	r.POST("/users/login", svc.LoginUser)

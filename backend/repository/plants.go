@@ -25,6 +25,8 @@ type PlantsRepo interface {
 	GetByCommon(ctx context.Context, common string) ([]*models.Plant, error)
 	GetByBotanical(ctx context.Context, botanical string) ([]*models.Plant, error)
 
+	SetImage(ctx context.Context, id string, imageURL string) error
+
 	Delete(ctx context.Context, id string) error
 }
 
@@ -184,6 +186,17 @@ func (r *plantsRepo) GetByBotanical(ctx context.Context, botanical string) ([]*m
 	}
 
 	return plants, nil
+}
+
+func (r *plantsRepo) SetImage(ctx context.Context, id string, imageURL string) error {
+	filter := bson.M{"ID": id}
+	update := bson.M{"$set": bson.M{"ImageURL": imageURL}}
+
+	if _, err := r.col.UpdateOne(ctx, filter, update); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *plantsRepo) Delete(ctx context.Context, id string) error {

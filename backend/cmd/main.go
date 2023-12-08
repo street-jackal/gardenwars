@@ -6,9 +6,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/api/customsearch/v1"
 
 	"github.com/street-jackal/gardenwars/env"
 	"github.com/street-jackal/gardenwars/handlers"
+	"github.com/street-jackal/gardenwars/internal/google"
 	"github.com/street-jackal/gardenwars/middleware"
 	"github.com/street-jackal/gardenwars/repository"
 	gardenwars "github.com/street-jackal/gardenwars/service"
@@ -48,9 +50,15 @@ func initService(ctx context.Context) *gardenwars.Service {
 		slog.Error("Failed to initialize the Users repo", err)
 	}
 
+	customsearchService, err := customsearch.NewService(ctx)
+	if err != nil {
+		slog.Error("Failed to initialize the Custom Search service", err)
+	}
+
 	// init the service and return it
 	return &gardenwars.Service{
-		PlantsRepo: plantsRepo,
-		UsersRepo:  usersRepo,
+		PlantsRepo:          plantsRepo,
+		UsersRepo:           usersRepo,
+		CustomSearchService: google.ImageSearch{CustomSearchService: customsearchService},
 	}
 }

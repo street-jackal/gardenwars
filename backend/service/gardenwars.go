@@ -2,12 +2,15 @@ package gardenwars
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/street-jackal/gardenwars/internal/google"
 	"github.com/street-jackal/gardenwars/repository"
 )
 
 type Service struct {
 	PlantsRepo repository.PlantsRepo
 	UsersRepo  repository.UsersRepo
+
+	CustomSearchService google.ImageSearch
 }
 
 type GardenWars interface {

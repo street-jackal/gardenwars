@@ -10,6 +10,7 @@ type Plant struct {
 	Characteristics string `json:"characteristics,omitempty" bson:"Characteristics,omitempty"`
 	Zones           []int  `json:"zones,omitempty" bson:"Zones,omitempty"`
 	Favorited       bool   `json:"favorited,omitempty" bson:"Favorited,omitempty"`
+	ImageURL        string `json:"imageURL,omitempty" bson:"ImageURL,omitempty"`
 
 	CreatedAt time.Time  `json:"createdAt" bson:"createdAt"`
 	UpdatedAt *time.Time `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
